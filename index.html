@@ -121,7 +121,7 @@
                     <div class="color-section__text fade-in">
                         Мы будем очень благодарны, если вы поддержите цветовую палитру нашей свадьбы:
                     </div>
-                    <div class="color-items">
+                    <div class="color-items sequence">
                         <div class="color-item sequence-item">
                             <img src="./img/color/1.jpeg">
                         </div>
@@ -228,29 +228,20 @@
                     }
                 });
             }, {
-                threshold: 0.1
+                threshold: 0.5
             });
 
             fadeInElements.forEach(element => {
                 observer.observe(element);
             });
 
-            sequenceItems.forEach((item, index) => {
-                setTimeout(() => {
-                    observer.observe(item);
-                }, index * 600); // Задержка между появлением элементов
-            });
+
             topItems.forEach((item, index) => {
                 setTimeout(() => {
                     observer.observe(item);
                 }, index * 600); // Задержка между появлением элементов
             });
-            timeItems.forEach((item, index) => {
-                setTimeout(() => {
-                    
-                    observer.observe(item);
-                }, index * 800); // Задержка между появлением элементов
-            });
+            
 
 
             // Функция для проверки, находится ли элемент в зоне видимости
@@ -263,6 +254,44 @@
                     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
                 );
             }
+            const observerSequen = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Запускаем анимацию для каждого элемента с задержкой
+                        sequenceItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, index * 300); // Задержка 300 мс между элементами
+                        });
+                        
+                    }
+                });
+            }, {
+                threshold: 0.5 // Настройка, чтобы срабатывало, когда элемент на 50% в зоне видимости
+            });
+
+            const sequenceContainer = document.querySelector('.sequence');
+            observerSequen.observe(sequenceContainer);
+
+
+            const observerTime = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Запускаем анимацию для каждого элемента с задержкой
+                        timeItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, index * 300); // Задержка 300 мс между элементами
+                        });
+                        
+                    }
+                });
+            }, {
+                threshold: 0.5 // Настройка, чтобы срабатывало, когда элемент на 50% в зоне видимости
+            });
+
+            const timeContainer = document.querySelector('.time-section');
+            observerTime.observe(timeContainer);
         });
     </script>
 </body>
